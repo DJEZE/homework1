@@ -46,6 +46,22 @@ def handle_order(cursor):
             cursor.execute("SELECT name FROM menu WHERE id = %s", (id,))
             item_name = cursor.fetchone()[0]
             print(f"{num}. {item_name}")
+            
+        item_number = input("Enter the number of the item you want to add (or '0' to finish): ").strip()
+        if item_number == '0':
+            break
+        if item_number in items:
+            item_id = items[item_number]
+            cursor.execute("SELECT id, name, price FROM menu WHERE id = %s", (item_id,))
+            item = cursor.fetchone()
+            if item:
+                order.append(item)
+            else:
+                print("Error retrieving item. Please try again.")
+        else:
+            print("Invalid item number. Please try again.")
+    
+    return order
 
 
 # Function to print the receipt
